@@ -2,7 +2,7 @@ import express from "express";
 import morgan from "morgan";
 
 import globalExpressErrorController from "./controllers/errorController.js";
-import recipesRouter from "./routers/recipesRouter.js";
+import recipesRouter from "./routers/recipeRouter.js";
 
 // 1) Global Body parse middleware.
 const app = express();
