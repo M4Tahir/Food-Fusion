@@ -10,5 +10,9 @@ router.route("/")
     .get(recipesController.getAllRecipesHandler)
     .post(recipesController.createRecipeHandler);
 
+router.route("/:id")
+    .get(recipesController.getRecipeHandler)
+    .delete(recipesController.deleteRecipeHandler)
+    .patch(recipesController.updateRecipeHandler);
 
 export default router;
