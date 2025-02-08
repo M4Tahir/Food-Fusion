@@ -26,12 +26,12 @@ const recipeSchema = new mongoose.Schema({
     title: {
         type: String,
         required: [true, "Recipe name is required"],
-        trim: true,
         maxLength: [100, "Recipe name can't exceeds 100 character"], /*Indexes are used to improve query performance by allowing MongoDB to quickly locate documents without scanning the entire collection.
         What it does:
         An index is like a "table of contents" for your MongoDB collection.
         When you query a field with an index, MongoDB can quickly find the matching documents instead of scanning every document in the collection.*/
-        index: true
+        trim: true,
+        index: true,
 
     },
     description: {
