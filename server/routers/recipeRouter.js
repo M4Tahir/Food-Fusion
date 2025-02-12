@@ -7,12 +7,12 @@ const router = express.Router();
 
 
 router.route("/")
-    .get(recipesController.getAllRecipesHandler)
-    .post(recipesController.createRecipeHandler);
+    .get(recipesController.getAllRecipes)
+    .post(recipesController.createRecipe);
 
 router.route("/:id")
-    .get(recipesController.getRecipeHandler)
-    .delete(recipesController.deleteRecipeHandler)
-    .patch(recipesController.updateRecipeHandler);
+    .get(recipesController.getRecipe)
+    .delete(recipesController.deleteRecipe)
+    .patch(recipesController.updateRecipe);
 
 export default router;

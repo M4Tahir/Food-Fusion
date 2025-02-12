@@ -37,7 +37,6 @@ class ApiFeatures {
         // {sort=val1,val12..}
         if (this.queryString.sort) {
             let str = this.queryString.sort.split(",").join(" ");
-            console.log(str);
             this.query = this.query.sort(str);
         } else {
             this.query = this.query.sort("-data_created");
