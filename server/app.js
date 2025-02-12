@@ -3,6 +3,7 @@ import morgan from "morgan";
 import hpp from "hpp";
 import globalExpressErrorController from "./controllers/errorController.js";
 import recipesRouter from "./routers/recipeRouter.js";
+import userRouter from "./routers/userRouter.js";
 import {getArrayFields} from "./utils/mongooseUtils.js";
 import RecipeModel from "./models/recipeModel.js";
 
@@ -27,6 +28,7 @@ if (process.env.NODE_ENV === "development")
     app.use(morgan("dev"));
 
 app.use("/api/v1/recipes", recipesRouter);
+app.use("/api/v1/users", userRouter);
 
 // LAST) Global error handler middleware.
 app.use(globalExpressErrorController);
