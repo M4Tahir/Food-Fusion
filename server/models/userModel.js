@@ -63,7 +63,12 @@ const schema = new mongoose.Schema({
     avatar: {
         type: String,
         validate: [validator.isURL, "Please provide a valid URL"]
-    }
+    },
+    password_changed_at: {
+        type: Date,
+
+    },
+
 }, schemeOption);
 
 // To encrypt the password before saving to a database.
@@ -75,6 +80,42 @@ schema.pre("save", async function (next) {
     next();
 });
 
+schema.pre("save", async function (next) {
+    // if the password is not modified and its new document, then no need to add pass changed field.
+    if (!this.isModified("password") || this.isNew)
+        return next();
+    this.password_changed_at = Date.now() - 2000; // -2000ms for delay.
+    next();
+});
+
+/**
+ * Compares a plaintext password with a hashed password to check if they match.
+ *
+ * @async
+ * @function isPasswordCorrect
+ * @param {string} password - The plaintext password to compare.
+ * @param {string} hashedPassword - The hashed password to compare against.
+ * @returns {Promise<boolean>} A promise that resolves to `true` if the passwords match, otherwise `false`.
+ */
+schema.methods.isPasswordCorrect = async (password, hashedPassword) => {
+    return await bcrypt.compare(password, hashedPassword);
+};
+
+/**
+ * Checks if the password was changed after the JWT was issued.
+ *
+ * @function passwordChangedAt
+ * @param {number} JWTTimestamp - The timestamp when the JWT was issued (in seconds).
+ * @returns {boolean} Returns `true` if the password was changed after the JWT was issued, otherwise `false`.
+ */
+schema.methods.passwordChangedAfter = function (JWTTimestamp) {
+    if (this.password_changed_at) {
+        // check if the password is changed after issuing JWT.
+        const changeTimeStamp = parseInt(this.password_changed_at.getTime() / 1000, 10);
+        return JWTTimestamp < changeTimeStamp;
+    }
+    return false;
+};
 
 const UserModel = mongoose.model("User", schema);
 export default UserModel;
