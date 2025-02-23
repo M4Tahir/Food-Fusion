@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import hpp from "hpp";
+import cookieParser from "cookie-parser";
 import globalExpressErrorController from "./controllers/errorController.js";
 import recipesRouter from "./routers/recipeRouter.js";
 import userRouter from "./routers/userRouter.js";
@@ -22,6 +23,11 @@ app.use(hpp({
 
 // 2) Global Body parse middleware.
 app.use(express.json());
+
+// use parse data encoded in url to body. When the form data sent request this, then form data is encoded in the url.
+app.use(express.urlencoded({extended: true}));
+
+app.use(cookieParser());
 
 // 3) Global request logger middleware.
 if (process.env.NODE_ENV === "development")

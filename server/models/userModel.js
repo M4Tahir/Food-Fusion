@@ -68,6 +68,11 @@ const schema = new mongoose.Schema({
         type: Date,
 
     },
+    role: {
+        type: String,
+        default: "user",
+        enum: ["user", "admin"]
+    }
 
 }, schemeOption);
 
@@ -112,6 +117,7 @@ schema.methods.passwordChangedAfter = function (JWTTimestamp) {
     if (this.password_changed_at) {
         // check if the password is changed after issuing JWT.
         const changeTimeStamp = parseInt(this.password_changed_at.getTime() / 1000, 10);
+        console.log(JWTTimestamp, changeTimeStamp);
         return JWTTimestamp < changeTimeStamp;
     }
     return false;

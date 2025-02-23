@@ -12,13 +12,13 @@ const createAndSendToken = (user, res, statusCode, next, sendUserData = false) =
     const token = signToken(user._id);
 
     const cookiesOption = {
-        expires: new Date(Date.now() + process.env.JWT_EXPIRES_IN * 24 * 60 * 60 * 1000),
+        expires: new Date(Date.now() + parseInt(process.env.JWT_EXPIRES_IN) * 24 * 60 * 60 * 1000),
         httpOnly: true,
     };
 
     if (process.env.NODE_ENV === "production")
         cookiesOption.secure = true;
-    res.cookie("jwt", token, cookiesOption);
+    res.cookie("token", token, cookiesOption);
 
     const response = {
         status: "success",
@@ -50,7 +50,7 @@ const signup = handleAsyncError(async (req, res, next) => {
 const login = handleAsyncError(async (req, res, next) => {
     const {email, password} = req.body;
     if (!email || !password) {
-        return next(new ExpressErrorHandler("Email and password are required.", 404));
+        return next(new ExpressErrorHandler("email and password are required.", 404));
     }
     // TODO: Implement access Token and refresh token mechanism.
 
@@ -69,32 +69,36 @@ const login = handleAsyncError(async (req, res, next) => {
  */
 const extractToken = (req) => {
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return null;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+        const token = authHeader.split(" ")[1]?.trim();
+        // as when header doesn't have an access token, then we have authorization=Bearer null, and at index[1] we get the string "null" which is truthy value.
+        if (token && token !== "null")
+            return token;
     }
 
-    const token = authHeader.split(" ")[1]?.trim();
-    // as when header doesn't have an access token, then we have authorization=Bearer null, and at index[1] we get the string "null" which is truthy value.
-    return token && token !== "null" ? token : null;
+    // check if token exist in cookies after parsing.
+    return req.cookies?.jwt || null;
 };
 
 const protect = handleAsyncError(async (req, res, next) => {
 
     const accessToken = extractToken(req);
+
     if (!accessToken)
-        return next(new ExpressErrorHandler("Access denied. Please log in to access this resource.", 401));
+        return next(new ExpressErrorHandler("access denied. Please log in to access this resource", 401));
 
     // jwt.verify(accessToken, process.env.JWT_SECRETE, (err) => {
     //     console.error(err);
     // });
     const decoded = await promisify(jwt.verify)(accessToken, process.env.JWT_SECRETE);
+    console.log(decoded);
     const currentUser = await UserModel.findById(decoded.id);
 
     if (!currentUser)
-        return next(new ExpressErrorHandler("User account no longer exists. Please sign up again.", 401));
+        return next(new ExpressErrorHandler("user account no longer exists. Please sign up again", 401));
 
     if (currentUser.passwordChangedAfter(decoded.iat))
-        return next(new ExpressErrorHandler("Your password was recently changed. Please log in again.", 403));
+        return next(new ExpressErrorHandler("your password was recently changed. Please log in again", 403));
 
     req.user = currentUser;
 
@@ -103,4 +107,16 @@ const protect = handleAsyncError(async (req, res, next) => {
 
 });
 
-export {signup, login, protect};
+
+const restrictTo = (...roles) => {
+    return (req, res, next) => {
+        // Default role for each user "user".
+        if (!roles.includes(req.user.role))
+            return next(new ExpressErrorHandler("access denied. your are not allowed to access this resource"));
+
+        // grant access.
+        next();
+    };
+};
+
+export {signup, login, protect, restrictTo};
