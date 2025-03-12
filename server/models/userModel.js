@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 
 const schemeOption = {
     timestamps: {createdAt: "date_created", updatedAt: "date_updated"},
@@ -66,13 +67,15 @@ const schema = new mongoose.Schema({
     },
     password_changed_at: {
         type: Date,
-
     },
+    password_reset_token: String,
+    password_reset_expires: Date,
     role: {
         type: String,
         default: "user",
         enum: ["user", "admin"]
-    }
+    },
+
 
 }, schemeOption);
 
@@ -122,6 +125,14 @@ schema.methods.passwordChangedAfter = function (JWTTimestamp) {
     }
     return false;
 };
+
+schema.methods.createPasswordResetToken = function () {
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    this.password_reset_token = crypto.createHash("sha256").update(resetToken).digest("hex");
+    this.password_reset_expires_in = Date.now() + 10 * 60 * 1000; // 10 min expire time.
+    return resetToken;
+};
+
 
 const UserModel = mongoose.model("User", schema);
 export default UserModel;

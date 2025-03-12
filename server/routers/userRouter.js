@@ -6,14 +6,14 @@ const router = express.Router();
 
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
+router.post("/forgot-password", authController.forgotPassword);
+router.post("/reset-password/:resetToken", authController.resetPassword);
 
 
 router.use(authController.protect);
 
 
-
-
-router.use(authController.restrictTo("admin"))
+router.use(authController.restrictTo("admin"));
 // Admin routes.
 router.route("/")
     .get(userController.getAllUsers)

@@ -3,6 +3,8 @@ import UserModel from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import ExpressErrorHandler from "../utils/expressErrorHandler.js";
 import {promisify} from "util";
+import {sendEmail} from "../utils/email.js";
+import crypto from "crypto";
 
 const signToken = (id) => {
     return jwt.sign({id}, process.env.JWT_SECRETE, {expiresIn: process.env.JWT_EXPIRES_IN});
@@ -62,6 +64,65 @@ const login = handleAsyncError(async (req, res, next) => {
     createAndSendToken(user, res, 201, next, false);
 });
 
+const forgotPassword = handleAsyncError(async (req, res, next) => {
+    const {email} = req.body;
+    if (!email) {
+        return next(new ExpressErrorHandler("Please provide a valid email.", 400));
+    }
+
+    const user = await UserModel.findOne({email});
+    if (!user) {
+        return next(new ExpressErrorHandler("If this email is registered, you will receive a password reset link.", 200));
+    }
+
+    const resetToken = user.createPasswordResetToken();
+    await user.save({validateBeforeSave: false});
+
+    const resetUrl = `${req.protocol}://${req.get("host")}/api/v1/users/reset-password/${resetToken}`;
+
+    const message = `Forgot your password? Submit a PATCH request with your new password and password_confirm to: ${resetUrl}.\nIf you didn't request this, please ignore this email.`;
+
+    try {
+        await sendEmail({email, subject: "Your password reset link (valid for 10 min)", message});
+
+        return res.status(200).json({
+            status: "success",
+            message: "Password reset link has been sent to your email."
+        });
+
+    } catch (error) {
+        user.password_reset_token = undefined;
+        user.password_reset_expires = undefined;
+        await user.save({validateBeforeSave: false});
+
+        return next(new ExpressErrorHandler("There was an error sending the email, please try again later.", 500));
+    }
+});
+
+const resetPassword = handleAsyncError(async (req, res, next) => {
+    const token = req.params?.resetToken;
+    if (!token) return next(new ExpressErrorHandler("Invalid or expired reset link", 400));
+
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    const user = await UserModel.findOne({
+        password_reset_token: hashedToken,
+        password_reset_expires: {$gt: Date.now()}
+    });
+
+    if (!user) return next(new ExpressErrorHandler("Reset link is invalid or has expired", 400));
+
+    const {password, password_confirm} = req.body;
+
+    user.password = password;
+    user.password_confirm = password_confirm;
+    user.password_reset_token = undefined;
+    user.password_reset_expires = undefined;
+    await user.save();
+
+    // Send new token after successful reset
+    createAndSendToken(user, res, 200, next, false);
+});
 
 /**
  * Extracts and validates the Bearer token from the request headers.
@@ -76,7 +137,7 @@ const extractToken = (req) => {
             return token;
     }
 
-    // check if token exist in cookies after parsing.
+    // check if a token exists in cookies after parsing.
     return req.cookies?.jwt || null;
 };
 
@@ -119,4 +180,4 @@ const restrictTo = (...roles) => {
     };
 };
 
-export {signup, login, protect, restrictTo};
+export {signup, login, forgotPassword, resetPassword, protect, restrictTo};
