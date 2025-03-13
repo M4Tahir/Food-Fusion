@@ -124,6 +124,22 @@ const resetPassword = handleAsyncError(async (req, res, next) => {
     createAndSendToken(user, res, 200, next, false);
 });
 
+const updateMyPassword = handleAsyncError(async (req, res, next) => {
+    const user = await UserModel.findById(req.user.id).select("+password");
+    console.log(user.password);
+    if (!await (user.isPasswordCorrect(req.body.password_current, user.password)))
+        return next(new ExpressErrorHandler("current password is incorrect"));
+
+    const password = req.body.password?.trim();
+    const passwordConfirm = req.body.password_confirm?.trim();
+    if (!(password && passwordConfirm))
+        return next(new ExpressErrorHandler("please provide password correct password"));
+    user.password = password;
+    user.password_confirm = passwordConfirm;
+    await user.save();
+    createAndSendToken(user, res, 200, next, false);
+});
+
 /**
  * Extracts and validates the Bearer token from the request headers.
  * Returns the token string if valid, otherwise returns `null`.
@@ -180,4 +196,4 @@ const restrictTo = (...roles) => {
     };
 };
 
-export {signup, login, forgotPassword, resetPassword, protect, restrictTo};
+export {signup, login, forgotPassword, resetPassword, updateMyPassword, protect, restrictTo};

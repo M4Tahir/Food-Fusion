@@ -12,6 +12,12 @@ router.post("/reset-password/:resetToken", authController.resetPassword);
 
 router.use(authController.protect);
 
+router.get("/me", userController.getMe, userController.getUser);
+router.patch("/update-password", authController.updateMyPassword);
+
+router.patch("/update-me", userController.updateMe);
+router.delete("/delete-me", userController.deleteMe);
+
 
 router.use(authController.restrictTo("admin"));
 // Admin routes.

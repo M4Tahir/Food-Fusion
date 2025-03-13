@@ -5,8 +5,8 @@ import crypto from "crypto";
 
 const schemeOption = {
     timestamps: {createdAt: "date_created", updatedAt: "date_updated"},
-    toJSON: {virtuals: true,},
-    toObject: {virtuals: true},
+    toJSON: {virtuals: true,}, // so we can get virtual properties in there when convert to JSON
+    toObject: {virtuals: true}, // to appear in log when used.
     versionKey: "version"
 };
 
@@ -37,6 +37,7 @@ const schema = new mongoose.Schema({
         required: [true, "Password is required"],
         minlength: [8, "Password must be at least 8 characters long"],
         select: false,
+        trim: true,
         validate: {
             validator: function (value) {
                 return validator.isStrongPassword(value, {
@@ -54,6 +55,7 @@ const schema = new mongoose.Schema({
     password_confirm: {
         type: String,
         required: [true, "Please confirm your password"],
+        trim: true,
         validate: {
             validator: function (value) {
                 return value === this.password;
@@ -75,9 +77,17 @@ const schema = new mongoose.Schema({
         default: "user",
         enum: ["user", "admin"]
     },
-
+    active: {
+        type: Boolean,
+        default: true
+    }
 
 }, schemeOption);
+
+schema.virtual("full_name").get(function () {
+    return `${this.first_name} ${this.last_name}`;
+});
+
 
 // To encrypt the password before saving to a database.
 schema.pre("save", async function (next) {
@@ -93,6 +103,11 @@ schema.pre("save", async function (next) {
     if (!this.isModified("password") || this.isNew)
         return next();
     this.password_changed_at = Date.now() - 2000; // -2000ms for delay.
+    next();
+});
+
+schema.pre(/^find/, function (next) {
+     this.find({active: {$ne: false}}).select("-version");
     next();
 });
 
