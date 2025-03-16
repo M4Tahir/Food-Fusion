@@ -7,7 +7,7 @@ import {sendEmail} from "../utils/email.js";
 import crypto from "crypto";
 
 const signToken = (id) => {
-    return jwt.sign({id}, process.env.JWT_SECRETE, {expiresIn: process.env.JWT_EXPIRES_IN});
+    return jwt.sign({id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRES_IN});
 };
 
 const createAndSendToken = (user, res, statusCode, next, sendUserData = false) => {
@@ -16,11 +16,13 @@ const createAndSendToken = (user, res, statusCode, next, sendUserData = false) =
     const cookiesOption = {
         expires: new Date(Date.now() + parseInt(process.env.JWT_EXPIRES_IN) * 24 * 60 * 60 * 1000),
         httpOnly: true,
+        sameSite: "Strict",
     };
+
 
     if (process.env.NODE_ENV === "production")
         cookiesOption.secure = true;
-    res.cookie("token", token, cookiesOption);
+    res.cookie("accessToken", token, cookiesOption);
 
     const response = {
         status: "success",
@@ -32,6 +34,10 @@ const createAndSendToken = (user, res, statusCode, next, sendUserData = false) =
         response.data = {user};
 
     res.status(statusCode).json(response);
+};
+
+const refreshToken = async (req, res, next) => {
+    createAndSendToken(req.user, res, 200, next, false);
 };
 
 const signup = handleAsyncError(async (req, res, next) => {
@@ -144,30 +150,32 @@ const updateMyPassword = handleAsyncError(async (req, res, next) => {
  * Extracts and validates the Bearer token from the request headers.
  * Returns the token string if valid, otherwise returns `null`.
  */
-const extractToken = (req) => {
+const extractToken = (req,next) => {
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith("Bearer ")) {
         const token = authHeader.split(" ")[1]?.trim();
         // as when header doesn't have an access token, then we have authorization=Bearer null, and at index[1] we get the string "null" which is truthy value.
         if (token && token !== "null")
             return token;
+        return next(new ExpressErrorHandler("access token is not found", 404))
     }
 
+
     // check if a token exists in cookies after parsing.
-    return req.cookies?.jwt || null;
+    return req.cookies?.accessToken || null;
 };
 
 const protect = handleAsyncError(async (req, res, next) => {
 
-    const accessToken = extractToken(req);
+    const accessToken = extractToken(req,next);
 
     if (!accessToken)
-        return next(new ExpressErrorHandler("access denied. Please log in to access this resource", 401));
+        return next(new ExpressErrorHandler("access denied. Access token not found, please log in to access this resource", 401));
 
     // jwt.verify(accessToken, process.env.JWT_SECRETE, (err) => {
     //     console.error(err);
     // });
-    const decoded = await promisify(jwt.verify)(accessToken, process.env.JWT_SECRETE);
+    const decoded = await promisify(jwt.verify)(accessToken, process.env.JWT_SECRET);
     console.log(decoded);
     const currentUser = await UserModel.findById(decoded.id);
 
@@ -196,4 +204,4 @@ const restrictTo = (...roles) => {
     };
 };
 
-export {signup, login, forgotPassword, resetPassword, updateMyPassword, protect, restrictTo};
+export {signup, login, refreshToken, forgotPassword, resetPassword, updateMyPassword, protect, restrictTo};

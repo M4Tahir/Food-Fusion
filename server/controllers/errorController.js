@@ -34,7 +34,7 @@ const handleError = (err) => {
         return new ExpressErrorHandler(`${err.message}, please login again`, 401);
 
     if (err instanceof jwt.JsonWebTokenError)
-        return new ExpressErrorHandler(`invalid token, please login again`, 401);
+        return new ExpressErrorHandler(`invalid token or token missing, please login again`, 401);
 
     return err;
 };
