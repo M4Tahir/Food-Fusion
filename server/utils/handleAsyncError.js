@@ -11,7 +11,7 @@
  */
 const handleAsyncError = (fn) => {
     return (req, res, next) => {
-        fn(req, res, next).catch(next); // Ensure the async function is properly invoked
+        fn(req, res, next).catch(next);
     };
 };
 
