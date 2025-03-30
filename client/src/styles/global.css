@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+/*
+:root {
+    --color-primary: 230, 57, 70;
+    --color-secondary: 244, 162, 97;
+    --color-accent-1: 42, 157, 143;
+    --color-accent-2: 233, 196, 106;
+    --color-background: 250, 245, 228;
+    --color-foreground: 51, 51, 51;
+}*/
+
+:root {
+    --color-primary: rgb(230, 57, 70);
+    --color-secondary: rgb(244, 162, 97);
+    --color-accent-1: rgb(42, 157, 143);
+    --color-accent-2: rgb(233, 196, 106);
+
+    --color-background: rgb(250, 245, 228);
+    --color-foreground: rgb(51, 51, 51);
+}
+
+[data-theme="dark"] {
+    --color-background: rgb(54, 56, 58);
+    --color-foreground: rgb(250, 245, 228);
+}
+
+/*
+
+@theme{
+    --color-primary: "rgba(var(--color-primary))";
+    --color-secondary: "rgba(var(--color-secondary))";
+    --color-accent1: "rgba(var(--color-accent-1))";
+    --color-accent2: "rgba(var(--color-accent-2))";
+    --color-background: "rgba(var(--color-background))";
+    --color-foreground: "rgba(var(--color-foreground))";
+}
+*/
+
+@theme{
+    --color-primary: "var(--color-primary)";
+    --color-secondary: "var(--color-secondary)";
+    --color-accent1: "var(--color-accent-1)";
+    --color-accent2: "var(--color-accent-2)";
+    --color-background: "var(--color-background)";
+    --color-foreground: "var(--color-foreground)";
+}
+
+body{
+    transition: color .3s ease-in;
+}
