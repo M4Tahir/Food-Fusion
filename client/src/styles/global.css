@@ -1,51 +1,63 @@
 @import "tailwindcss";
 
-/*
 :root {
-    --color-primary: 230, 57, 70;
-    --color-secondary: 244, 162, 97;
-    --color-accent-1: 42, 157, 143;
-    --color-accent-2: 233, 196, 106;
-    --color-background: 250, 245, 228;
-    --color-foreground: 51, 51, 51;
-}*/
+    /* Brand Colors */
+    --color-primary: #e63946; /* Warm red - accent/highlight */
+    --color-secondary: #f4a261; /* Peach - warm buttons/badges */
+    --color-accent-1: #2a9d8f; /* Minty green - freshness hint */
+    --color-accent-2: #e9c46a; /* Buttery yellow - subtle accent */
 
-:root {
-    --color-primary: rgb(230, 57, 70);
-    --color-secondary: rgb(244, 162, 97);
-    --color-accent-1: rgb(42, 157, 143);
-    --color-accent-2: rgb(233, 196, 106);
+    /* System Colors */
+    --color-success: #2ecc71;
+    --color-error: #e74c3c;
+    --color-warning: #f39c12;
+    --color-info: #3498db;
 
-    --color-background: rgb(250, 245, 228);
-    --color-foreground: rgb(51, 51, 51);
+    /* Neutrals & Defaults */
+    --color-background: #ffffff;
+    --color-foreground: #121212;
+    --color-muted: #6b7280;
+    --color-border: #d1d5db;
+    --color-hover: #f9fafb;
+
+    --color-text-on-primary: #fdf6ee;
+
+}
+
+[data-theme="light"] {
+    --color-background: #faf5e4;
+    --color-foreground: #333333;
+
+    --color-muted: #6b7280;
+    --color-border: #e0e0e0;
+    --color-hover: #f0ece2;
 }
 
 [data-theme="dark"] {
-    --color-background: rgb(54, 56, 58);
-    --color-foreground: rgb(250, 245, 228);
+    --color-background: #2b2b28;
+    --color-foreground: #fdf6ee;
+    --color-muted: #b8b8b8;
+    --color-border: #4e4e4e;
+    --color-hover: #3a3a36;
 }
 
-/*
 
-@theme{
-    --color-primary: "rgba(var(--color-primary))";
-    --color-secondary: "rgba(var(--color-secondary))";
-    --color-accent1: "rgba(var(--color-accent-1))";
-    --color-accent2: "rgba(var(--color-accent-2))";
-    --color-background: "rgba(var(--color-background))";
-    --color-foreground: "rgba(var(--color-foreground))";
-}
-*/
-
-@theme{
-    --color-primary: "var(--color-primary)";
-    --color-secondary: "var(--color-secondary)";
-    --color-accent1: "var(--color-accent-1)";
-    --color-accent2: "var(--color-accent-2)";
-    --color-background: "var(--color-background)";
-    --color-foreground: "var(--color-foreground)";
+@theme {
+    --color-primary: var(--color-primary);
+    --color-secondary: var(--color-secondary);
+    --color-accent1: var(--color-accent-1);
+    --color-accent2: var(--color-accent-2);
+    --color-background: var(--color-background);
+    --color-foreground: var(--color-foreground);
+    --color-text-on-primary: var(--color-text-on-primary);
 }
 
-body{
-    transition: color .3s ease-in;
+html {
+    transition: background-color .5s ease-in;
+}
+
+body {
+    transition: color 0.3s ease-in;
+    font-family: "Poppins", sans-serif;
+    font-size: 1rem; /* 1 rem = 16px tailwind.*/
 }
