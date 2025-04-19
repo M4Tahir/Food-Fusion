@@ -15,30 +15,36 @@
 
     /* Neutrals & Defaults */
     --color-background: #ffffff;
-    --color-foreground: #121212;
+    --color-foreground: #101828;
+
     --color-muted: #6b7280;
     --color-border: #d1d5db;
     --color-hover: #f9fafb;
 
-    --color-text-on-primary: #fdf6ee;
+    --color-text-on-primary: #fff;
 
 }
 
 [data-theme="light"] {
-    --color-background: #faf5e4;
+    --color-background: #fff;
     --color-foreground: #333333;
 
     --color-muted: #6b7280;
-    --color-border: #e0e0e0;
-    --color-hover: #f0ece2;
+    --color-border: rgba(51, 51, 51, 0.15);
+    --color-hover: rgba(51, 51, 51, 0.05);
+
+    --color-header-bg: rgba(250, 255, 255, 0.5);
 }
 
 [data-theme="dark"] {
-    --color-background: #2b2b28;
-    --color-foreground: #fdf6ee;
+    --color-background: #101828;
+    --color-foreground: #fff;
+
     --color-muted: #b8b8b8;
-    --color-border: #4e4e4e;
-    --color-hover: #3a3a36;
+    --color-border: rgba(255, 255, 255, 0.2);
+    --color-hover: rgba(255, 255, 255, 0.08);
+
+    --color-header-bg: rgba(16, 24, 40, 0.5)
 }
 
 
@@ -60,4 +66,39 @@ body {
     transition: color 0.3s ease-in;
     font-family: "Poppins", sans-serif;
     font-size: 1rem; /* 1 rem = 16px tailwind.*/
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    position: relative;
+}
+
+@layer components {
+    .header {
+        background-color: var(--color-header-bg);
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, .1);
+
+        position: sticky;
+        top: 0;
+    }
+
+
+    .nav-item {
+        transition: all .3s ease-out;
+        transform-origin: center;
+        padding: 10px;
+        border: 1px solid transparent;
+
+    }
+
+
+    .nav-item:hover,
+    .active {
+        background-color: var(--color-hover);
+        border-radius: 10px;
+        border: 1px solid var(--color-border);
+    }
 }

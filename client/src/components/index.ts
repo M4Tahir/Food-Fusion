@@ -1,8 +1,4 @@
 import Footer from "./Footer.tsx";
-import Header from "./Header.tsx";
+import Logo from "./Logo.tsx";
 
-export default {
-  Footer,
-  Header,
-
-}
+export { Logo, Footer };
