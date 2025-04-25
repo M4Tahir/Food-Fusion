@@ -15,10 +15,11 @@ const LinkButton = ({ children, to, type }: LinkButtonProps) => {
   const variantStyles =
     type === "primary"
       ? "bg-primary text-white border-primary hover:bg-opacity-80"
-      : "border-primary text-primary hover:bg-primary hover:text-white";
+      : "border-primary text-primary";
 
   return (
-    <Link to={to} className={clsx(baseStyles, variantStyles)}>
+    <Link to={to}
+          className={clsx(baseStyles, variantStyles, "hover:shadow-[0_4px_5px_currentColor]  hover:shadow-primary ease-out duration-300")}>
       {children}
     </Link>
   );

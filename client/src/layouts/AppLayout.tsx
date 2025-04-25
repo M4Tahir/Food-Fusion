@@ -8,7 +8,7 @@ const AppLayout = () => {
       <Header />
       <main>
         <div className="space-y-4">
-          <p className="text-foreground bg-background mx-auto w-[800px] rounded-2xl border border-pink-50 px-6 py-8">
+          <p className="text-foreground bg-surface mx-auto w-[800px] rounded-2xl border border-border px-6 py-8">
             <span>
               Nihil, rerum voluptatibus. Ad alias aliquam aut consequatur
               corporis dignissimos dolorum eius enim eum iusto libero maiores
@@ -28,7 +28,7 @@ const AppLayout = () => {
               numquam omnis quidem quos recusandae suscipit.
             </span>
           </p>
-          <p className="text-foreground bg-background mx-auto w-[800px] rounded-2xl border border-pink-50 px-6 py-8">
+          <p className="text-foreground bg-surface mx-auto w-[800px] rounded-2xl border border-border px-6 py-8">
             <span>
               Nihil, rerum voluptatibus. Ad alias aliquam aut consequatur
               corporis dignissimos dolorum eius enim eum iusto libero maiores
@@ -48,7 +48,7 @@ const AppLayout = () => {
               numquam omnis quidem quos recusandae suscipit.
             </span>
           </p>
-          <p className="text-foreground bg-background mx-auto w-[800px] rounded-2xl border border-pink-50 px-6 py-8">
+          <p className="text-foreground bg-surface mx-auto w-[800px] rounded-2xl border border-border px-6 py-8">
             <span>
               Nihil, rerum voluptatibus. Ad alias aliquam aut consequatur
               corporis dignissimos dolorum eius enim eum iusto libero maiores
@@ -68,7 +68,7 @@ const AppLayout = () => {
               numquam omnis quidem quos recusandae suscipit.
             </span>
           </p>{" "}
-          <p className="text-foreground bg-background mx-auto w-[800px] rounded-2xl border border-pink-50 px-6 py-8">
+          <p className="text-foreground bg-surface mx-auto w-[800px] rounded-2xl border border-border px-6 py-8">
             <span>
               Nihil, rerum voluptatibus. Ad alias aliquam aut consequatur
               corporis dignissimos dolorum eius enim eum iusto libero maiores
