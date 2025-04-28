@@ -32,7 +32,7 @@
 
     --color-muted: #f3f4f6;
     --color-border: #e5e7eb;
-    --color-hover: #f9fafb;
+    --color-hover: #e5e7eb;
 
     /*--color-muted: #9ca3af;*/
     /*--color-border: #cbd5e1;*/
@@ -50,7 +50,7 @@
 
     --color-muted: #1f2937;
     --color-border: #374151;
-    --color-hover: #1a202c;
+    --color-hover: #252f3f;
 
     --color-header-bg: rgba(16, 24, 40, 0.5)
 }

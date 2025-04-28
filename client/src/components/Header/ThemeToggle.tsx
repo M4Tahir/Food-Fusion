@@ -1,5 +1,7 @@
 import { useTheme } from "../../context";
 import Modal from "../Modal/Modal.tsx";
+import { useRef } from "react";
+import ThemeToggleMenu from "./ThemeToggleMenu.tsx";
 
 interface ThemeToggleProps {
   height?: number;
@@ -41,20 +43,19 @@ const Dark = ({ height = 32, width = 32, fill = "fill-accent2" }: ThemeTogglePro
 
 const ThemeToggle = () => {
 
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
   const triggerRef = useRef<HTMLButtonElement>(null);
 
 
   return (
-    <Modal>
+    <Modal lockScroll={false}>
       <Modal.Dailog showCloseButton={false}
                     backdropFilter={false}
                     modalName="theme-win"
                     triggerRef={triggerRef}
-                    size={{ width: "400px", height: "200px" }}>
-        <p>This is child element with some nice background Lorem ipsum dolor sit amet, consectetur
-          adipisicing elit. Atque autem beatae cupiditate doloribus ipsam iusto libero magni, modi officiis perferendis
-          quaerat velit voluptatem? Beatae eveniet hic minus quia sint vero!</p>
+                    size={{ width: "auto", height: "auto" }}
+      >
+        <ThemeToggleMenu />
       </Modal.Dailog>
       <Modal.Open modalName="theme-win">
         <button className="duration-300 ease-out hover:scale-105 hover:cursor-pointer" ref={triggerRef}>

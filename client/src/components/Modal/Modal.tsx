@@ -55,10 +55,20 @@ const Modal = ({ children, lockScroll = true }: { children: ReactNode; lockScrol
 
   // Lock scroll on modal open
   useEffect(() => {
+    /* The problem with this is when overflow is hidden then scrollbar disappears, causing layout shift to prevent that
+    * we can either add scroll listener and prevent scrolling or a clean solution will be to add padding right equal to
+    * scroll bar with so when it disappears then it won't cause any layout shift. */
+
+    // const scrollWidth = innerWidth-document.documentElement.clientWidth
+    const scrollWidth = window.innerWidth - document.documentElement.clientWidth;
     if (lockScroll && openModalName) {
-      document.body.classList.add("overflow-hidden");
+      document.body.style.paddingRight = `${scrollWidth}px`;
+      document.body.style.overflow = "hidden";
+      // document.body.classList.add("overflow-hidden");
       return () => {
-        document.body.classList.remove("overflow-hidden");
+        // document.body.classList.remove("overflow-hidden");
+        document.body.style.paddingRight = ``;
+        document.body.style.overflow = "";
       };
     }
   }, [openModalName, lockScroll]);
@@ -121,6 +131,7 @@ const Dialog = ({
       const triggerRect = trigger.getBoundingClientRect();
       const dialogRect = dialog.getBoundingClientRect();
 
+      // const x = triggerRect.left + (triggerRect.width/2) - (dialogRect.width/2); // center align
       const x = triggerRect.left + (triggerRect.width) - (dialogRect.width);
       const y = triggerRect.bottom + 8;
 
@@ -139,7 +150,7 @@ const Dialog = ({
         role="dialog"
         aria-modal="true"
         className={clsx(
-          "p-6 z-30 border bg-surface border-border rounded-xl absolute",
+          "z-30 border bg-surface border-border rounded-xl absolute",
           !pos && "left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
         )}
         style={{
