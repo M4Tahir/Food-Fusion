@@ -8,11 +8,34 @@ const routes = createBrowserRouter([
     element: <AppLayout />,
     children: [
       {
-        path: "test",
-        element: <DarkTestComponent/>
+        path: "recipes",
+        element: <p>Some recipes.</p>
       },
-    ],
+      {
+        path: "popular",
+        element: <p>Some recipes.</p>
+      },
+      {
+        path: "cuisine",
+        element: <p>Some recipes.</p>
+      },
+
+      {
+        path: "test",
+        element: <DarkTestComponent />
+      }
+    ]
+
   },
+  {
+    path: "/login",
+    element: <p>Login Page</p>
+  },
+  {
+    path: "/signup",
+    element: <p>Login Page</p>
+
+  }
 ]);
 
 export default routes;

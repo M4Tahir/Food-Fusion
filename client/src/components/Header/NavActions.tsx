@@ -6,12 +6,12 @@ const NavActions = () => {
     <ul className="flex items-center gap-4">
       <ThemeToggle />
       <li>
-        <LinkButton type="secondary" to="">
+        <LinkButton type="secondary" to="/login">
           Sign In
         </LinkButton>
       </li>
       <li>
-        <LinkButton type="primary" to="">
+        <LinkButton type="primary" to="/signup">
           Signup
         </LinkButton>
       </li>

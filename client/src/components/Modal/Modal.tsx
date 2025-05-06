@@ -92,7 +92,7 @@ const Modal = ({ children, lockScroll = true }: { children: ReactNode; lockScrol
   );
 };
 
-interface WindowProps {
+interface DialogProps {
   backdropFilter?: boolean;
   children: ReactNode;
   triggerRef?: RefObject<HTMLButtonElement | null>;
@@ -108,7 +108,7 @@ const Dialog = ({
                   triggerRef,
                   backdropFilter = true,
                   showCloseButton = true
-                }: WindowProps) => {
+                }: DialogProps) => {
   const { openModalName, close } = useContext(ModalContext);
   const ref = useClickOutside<HTMLDivElement>(close);
   const dialogRef = useClickOutside<HTMLDivElement>(close);
@@ -116,7 +116,7 @@ const Dialog = ({
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
   const isOpen = modalName === openModalName;
 
-  // Position calculation logic
+  // Position calculation
   /* Its batter to use `useLayoutEffect` instead of `useEffect` as useEffect execute after browser paint, so let say that our model doesn't fit in the specified position then
   * it move somewhere and when the useEffect execute and calculate its position then we get it to correct pos which case mode to move form one place to other, we need something which run before
   * the browser paint and calculate the position, that's exactly what useLayoutEffect() does it run before the browser paint.
@@ -150,7 +150,7 @@ const Dialog = ({
         role="dialog"
         aria-modal="true"
         className={clsx(
-          "z-30 border bg-surface border-border rounded-xl absolute",
+          "z-30 outline outline-border bg-surface rounded-xl absolute",
           !pos && "left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
         )}
         style={{
