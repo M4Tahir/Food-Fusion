@@ -1,11 +1,5 @@
-import { useClickOutside } from "./useClickOutside.ts";
-import useLocalStorage from "./useLocalStorage.ts";
-import { useAppDispatch, useAppSelector } from "./useRedux.ts";
+// export { default as useLocalStorage } from "./useLocalStorage";
+export { useLocalStorage } from './useLocalStorage';
+export { useAppDispatch, useAppSelector } from './useRedux.ts';
 
-
-export {
-  useLocalStorage,
-  useAppDispatch,
-  useAppSelector,
-  useClickOutside
-};
+export { useClickOutside } from './useClickOutside.ts';

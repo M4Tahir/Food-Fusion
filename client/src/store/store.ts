@@ -1,10 +1,9 @@
-import {configureStore} from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
 
 const store = configureStore({
-
-    reducer: {}
+	reducer: {},
 });
 
-export default store
-export type AppDispatch = typeof store.dispatch
-export type AppStore = typeof store
+export default store;
+export type AppDispatch = typeof store.dispatch;
+export type AppStore = typeof store;

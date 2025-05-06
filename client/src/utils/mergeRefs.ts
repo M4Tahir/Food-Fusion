@@ -1,4 +1,4 @@
-import { MutableRefObject, Ref, RefCallback, RefObject } from "react";
+import { Ref, RefCallback, RefObject } from 'react';
 
 /**
  * Merges multiple React refs into a single callback ref function.
@@ -73,25 +73,19 @@ import { MutableRefObject, Ref, RefCallback, RefObject } from "react";
  */
 
 function mergeRefs<T>(...inputRefs: (Ref<T> | undefined)[]): Ref<T> | RefCallback<T> {
+	const filteredInputRefs = inputRefs.filter(Boolean);
 
-  const filteredInputRefs = inputRefs.filter(Boolean);
+	if (filteredInputRefs.length <= 1) {
+		const firstRef = filteredInputRefs[0];
+		return firstRef || null;
+	}
 
-  if (filteredInputRefs.length <= 1) {
-    const firstRef = filteredInputRefs[0];
-    return firstRef || null;
-
-  }
-
-  return function mergedRefs(ref) {
-    for (const inputRef of filteredInputRefs) {
-      if (typeof inputRef === "function")
-        inputRef(ref);
-      else if (inputRef)
-        (inputRef as RefObject<T | null>).current = ref;
-    }
-
-  };
-
+	return function mergedRefs(ref) {
+		for (const inputRef of filteredInputRefs) {
+			if (typeof inputRef === 'function') inputRef(ref);
+			else if (inputRef) (inputRef as RefObject<T | null>).current = ref;
+		}
+	};
 }
 
 export { mergeRefs };
