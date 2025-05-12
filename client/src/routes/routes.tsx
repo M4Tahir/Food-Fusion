@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import AppLayout from "../layouts/AppLayout.tsx";
-import DarkTestComponent from "../components/DarkTestComponent.tsx";
+import { DarkTestComponent } from "../components";
 
 const routes = createBrowserRouter([
   {
@@ -11,15 +11,6 @@ const routes = createBrowserRouter([
         path: "recipes",
         element: <p>Some recipes.</p>
       },
-      {
-        path: "popular",
-        element: <p>Some recipes.</p>
-      },
-      {
-        path: "cuisine",
-        element: <p>Some recipes.</p>
-      },
-
       {
         path: "test",
         element: <DarkTestComponent />

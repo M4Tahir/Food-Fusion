@@ -1,7 +1,6 @@
 import { useTheme } from "../../context";
-import Modal from "../Modal/Modal.tsx";
 import { useRef } from "react";
-import ThemeToggleMenu from "./ThemeToggleMenu.tsx";
+import { Modal, ThemeToggleMenu } from "../index.ts";
 
 interface ThemeToggleProps {
   height?: number;

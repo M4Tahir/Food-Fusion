@@ -1,6 +1,6 @@
 import React from "react";
-import ThemeToggleItem from "./ThemeToggleItem.tsx";
 import { useTheme } from "../../context";
+import { ThemeToggleItem } from "./index.ts";
 
 const options = [
   { label: "Dark", value: "dark" },
