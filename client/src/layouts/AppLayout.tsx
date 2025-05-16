@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { CoverSection, Footer, Header } from "../components";
+import { Footer, Header } from "../components";
 
 const AppLayout = () => {
   return (
@@ -7,11 +7,7 @@ const AppLayout = () => {
 
       <Header />
 
-      <main className=" grid grid-rows-[auto_auto_auto] p-6">
-
-        <section>
-          <CoverSection />
-        </section>
+      <main className="p-6">
 
         <Outlet />
 

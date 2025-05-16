@@ -1,12 +1,18 @@
 import React from "react";
-import { LogoProps } from "../types/components";
+
+interface LogoProps {
+  width?: string;
+  height?: string;
+  fill?: string;
+  stroke?: string;
+}
 
 const Logo = ({
-  width = "128px",
-  height = "128px",
-  fill = "#e63946",
-  stroke = "none",
-}: LogoProps) => {
+                width = "128px",
+                height = "128px",
+                fill = "#e63946",
+                stroke = "none"
+              }: LogoProps) => {
   return (
     <div className="px-4 hover:cursor-pointer">
       <svg

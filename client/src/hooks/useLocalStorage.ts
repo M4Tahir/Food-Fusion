@@ -8,7 +8,7 @@ import React, { useEffect, useState } from "react";
  */
 const useLocalStorage = <T>(
   key: string,
-  initialValue: T,
+  initialValue: T
 ): [T, React.Dispatch<React.SetStateAction<T>>] => {
   const [value, setValue] = useState<T>(() => {
     const data = localStorage.getItem(key);
@@ -25,11 +25,11 @@ const useLocalStorage = <T>(
   useEffect(() => {
     localStorage.setItem(
       key,
-      typeof value === "string" ? value : JSON.stringify(value),
+      typeof value === "string" ? value : JSON.stringify(value)
     );
   }, [value, key]);
 
   return [value, setValue];
 };
 
-export default useLocalStorage;
+export { useLocalStorage };

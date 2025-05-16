@@ -7,3 +7,4 @@ export { default as DarkTestComponent } from "./DarkTestComponent";
 export { default as Logo } from "./Logo";
 export { default as CoverImage } from "./CoverImage";
 export { default as CoverSection } from "./CoverSection";
+export { default as Heading } from "./Heading.tsx";

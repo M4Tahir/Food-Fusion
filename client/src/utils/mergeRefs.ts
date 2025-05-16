@@ -1,4 +1,4 @@
-import { MutableRefObject, Ref, RefCallback, RefObject } from "react";
+import { Ref, RefCallback, RefObject } from "react";
 
 /**
  * Merges multiple React refs into a single callback ref function.

@@ -5,10 +5,11 @@ import clsx from "clsx";
 interface LinkButtonProps {
   children: ReactNode;
   to: string;
+  replace?: boolean;
   type: "primary" | "secondary";
 }
 
-const LinkButton = ({ children, to, type }: LinkButtonProps) => {
+const LinkButton = ({ children, to, type, replace = false }: LinkButtonProps) => {
   const baseStyles =
     "cursor-pointer rounded-md px-6 py-3 transition-all duration-300 border text-sm font-medium";
 
@@ -18,8 +19,8 @@ const LinkButton = ({ children, to, type }: LinkButtonProps) => {
       : "border-primary text-primary";
 
   return (
-    <Link to={to}
-          className={clsx(baseStyles, variantStyles, "hover:shadow-[0_4px_5px_currentColor]  hover:shadow-primary ease-out duration-300")}>
+    <Link to={to} replace={replace}
+          className={clsx(baseStyles, variantStyles, "hover:shadow-[0_1px_5px_currentColor]  hover:shadow-primary ease-out duration-300")}>
       {children}
     </Link>
   );

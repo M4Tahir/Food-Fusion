@@ -115,10 +115,13 @@ body {
 
 
     .nav-item:hover,
-    .active {
+    nav .active {
         background-color: var(--color-hover);
         border-radius: 10px;
         border: 1px solid var(--color-border);
     }
 
+    .img-gradient {
+        background-image: linear-gradient(to right, rgba(0, 0, 0, .8) 10%, rgba(0, 0, 0, .5) 20%, transparent 100%);
+    }
 }

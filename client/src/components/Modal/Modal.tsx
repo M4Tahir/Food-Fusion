@@ -34,7 +34,7 @@ const Overlay = ({ children, backdropFilter = true }: { children: ReactNode; bac
   return (
     <div
       className={clsx(
-        "fixed inset-0 z-20 bg-background/5",
+        "fixed inset-0 bg-background/5 z-[999]",
         backdropFilter && "backdrop-blur-[2px]"
       )}>
       {children}
