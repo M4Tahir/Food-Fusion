@@ -10,9 +10,9 @@
  *                       function and catches any errors, forwarding them to the global error handler.
  */
 const handleAsyncError = (fn) => {
-    return (req, res, next) => {
-        fn(req, res, next).catch(next);
-    };
+	return (req, res, next) => {
+		fn(req, res, next).catch(next);
+	};
 };
 
-export {handleAsyncError};
+export { handleAsyncError };

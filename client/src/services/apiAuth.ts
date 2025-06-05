@@ -6,11 +6,15 @@ const getCurrentUser = async () => {
 
 
 const login = async ({ email, password }: { email: string, password: string }) => {
-    const res = await fetch("localhost:/8080", {
+
+    console.log(email, password)
+
+    const res = await fetch("http://127.0.0.1:8080/api/v1/users/login", {
         method: "POST",
-        headers: { "Content-Type": "Application/json" },
-        body: JSON.stringify({ email, password })
-    })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+    });
+    console.log(res)
 
     if (!res.ok) {
         const err = await res.json()
@@ -18,7 +22,9 @@ const login = async ({ email, password }: { email: string, password: string }) =
     }
 
 
-    return await res.json()
+    const data = await res.json()
+    console.log(data)
+    return data
 }
 
 const logout = async () => {

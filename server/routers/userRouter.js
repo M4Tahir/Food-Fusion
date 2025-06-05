@@ -9,7 +9,6 @@ router.post("/login", authController.login);
 router.post("/forgot-password", authController.forgotPassword);
 router.post("/reset-password/:resetToken", authController.resetPassword);
 
-
 router.use(authController.protect);
 
 router.post("/refresh-token", authController.refreshToken);
@@ -20,18 +19,13 @@ router.patch("/update-password", authController.updateMyPassword);
 router.patch("/update-me", userController.updateMe);
 router.delete("/delete-me", userController.deleteMe);
 
-
 router.use(authController.restrictTo("admin"));
 // Admin routes.
-router.route("/")
-    .get(userController.getAllUsers)
-    .post(userController.createUser);
+router.route("/").get(userController.getAllUsers).post(userController.createUser);
 
 router.get("/:id", userController.getUser);
 
 // user Routes
-router.route("/:id")
-    .patch(userController.updateUser)
-    .delete(userController.deleteUser);
+router.route("/:id").patch(userController.updateUser).delete(userController.deleteUser);
 
 export default router;

@@ -4,111 +4,111 @@ import bcrypt from "bcrypt";
 import crypto from "crypto";
 
 const schemeOption = {
-    timestamps: {createdAt: "date_created", updatedAt: "date_updated"},
-    toJSON: {virtuals: true,}, // so we can get virtual properties in there when convert to JSON
-    toObject: {virtuals: true}, // to appear in log when used.
-    versionKey: "version"
+	timestamps: { createdAt: "date_created", updatedAt: "date_updated" },
+	toJSON: { virtuals: true }, // so we can get virtual properties in there when convert to JSON
+	toObject: { virtuals: true }, // to appear in log when used.
+	versionKey: "version",
 };
 
-const schema = new mongoose.Schema({
-    first_name: {
-        type: String,
-        required: [true, "First name is required"],
-        minLength: [1, "First name can't be less than 1 character"],
-        maxLength: [30, "First name can't exceed 30 characters"],
-        trim: true
-    },
-    last_name: {
-        type: String,
-        minLength: [1, "Last name can't be less than 1 character"],
-        maxLength: [30, "Last name can't exceed 30 characters"],
-        trim: true
-    },
-    email: {
-        type: String,
-        required: [true, "Email is required"],
-        unique: true,
-        lowercase: true,
-        trim: true,
-        validate: [validator.isEmail, "Please provide a valid email"]
-    },
-    password: {
-        type: String,
-        required: [true, "Password is required"],
-        minlength: [8, "Password must be at least 8 characters long"],
-        select: false,
-        trim: true,
-        validate: {
-            validator: function (value) {
-                return validator.isStrongPassword(value, {
-                    minLength: 8,
-                    minLowercase: 1,
-                    minUppercase: 1,
-                    minNumbers: 1,
-                    minSymbols: 1
-                });
-            },
-            message: "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.",
-        }
-    },
-    // As this fields is temporary mean that we will delete set this field to be undefended after the password is matched.
-    password_confirm: {
-        type: String,
-        required: [true, "Please confirm your password"],
-        trim: true,
-        validate: {
-            validator: function (value) {
-                return value === this.password;
-            },
-            message: "Passwords do not match"
-        }
-    },
-    avatar: {
-        type: String,
-        validate: [validator.isURL, "Please provide a valid URL"]
-    },
-    password_changed_at: {
-        type: Date,
-    },
-    password_reset_token: String,
-    password_reset_expires: Date,
-    role: {
-        type: String,
-        default: "user",
-        enum: ["user", "admin"]
-    },
-    active: {
-        type: Boolean,
-        default: true
-    }
-
-}, schemeOption);
+const schema = new mongoose.Schema(
+	{
+		first_name: {
+			type: String,
+			required: [true, "First name is required"],
+			minLength: [1, "First name can't be less than 1 character"],
+			maxLength: [30, "First name can't exceed 30 characters"],
+			trim: true,
+		},
+		last_name: {
+			type: String,
+			minLength: [1, "Last name can't be less than 1 character"],
+			maxLength: [30, "Last name can't exceed 30 characters"],
+			trim: true,
+		},
+		email: {
+			type: String,
+			required: [true, "Email is required"],
+			unique: true,
+			lowercase: true,
+			trim: true,
+			validate: [validator.isEmail, "Please provide a valid email"],
+		},
+		password: {
+			type: String,
+			required: [true, "Password is required"],
+			minlength: [8, "Password must be at least 8 characters long"],
+			select: false,
+			trim: true,
+			validate: {
+				validator: function (value) {
+					return validator.isStrongPassword(value, {
+						minLength: 8,
+						minLowercase: 1,
+						minUppercase: 1,
+						minNumbers: 1,
+						minSymbols: 1,
+					});
+				},
+				message:
+					"Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.",
+			},
+		},
+		// As this fields is temporary mean that we will delete set this field to be undefended after the password is matched.
+		password_confirm: {
+			type: String,
+			required: [true, "Please confirm your password"],
+			trim: true,
+			validate: {
+				validator: function (value) {
+					return value === this.password;
+				},
+				message: "Passwords do not match",
+			},
+		},
+		avatar: {
+			type: String,
+			validate: [validator.isURL, "Please provide a valid URL"],
+		},
+		password_changed_at: {
+			type: Date,
+		},
+		password_reset_token: String,
+		password_reset_expires: Date,
+		role: {
+			type: String,
+			default: "user",
+			enum: ["user", "admin"],
+		},
+		active: {
+			type: Boolean,
+			default: true,
+		},
+	},
+	schemeOption,
+);
 
 schema.virtual("full_name").get(function () {
-    return `${this.first_name} ${this.last_name}`;
+	return `${this.first_name} ${this.last_name}`;
 });
-
 
 // To encrypt the password before saving to a database.
 schema.pre("save", async function (next) {
-    if (!this.isModified("password"))
-        return next();
-    this.password = await bcrypt.hash(this.password, 12);
-    this.password_confirm = undefined;
-    next();
+	if (!this.isModified("password")) return next();
+	this.password = await bcrypt.hash(this.password, 12);
+	this.password_confirm = undefined;
+	next();
 });
 
 schema.pre("save", async function (next) {
-    // if the password is not modified and its new document, then no need to add pass changed field.
-    if (!this.isModified("password") || this.isNew)
-        return next();
-    this.password_changed_at = Date.now() - 2000; // -2000ms for delay.
-    next();
+	// if the password is not modified and its new document, then no need to add pass changed field.
+	if (!this.isModified("password") || this.isNew) return next();
+	this.password_changed_at = Date.now() - 2000; // -2000ms for delay.
+	next();
 });
 
 schema.pre(/^find/, function (next) {
-     this.find({active: {$ne: false}}).select("-version");
-    next();
+	this.find({ active: { $ne: false } }).select("-version");
+	next();
 });
 
 /**
@@ -121,7 +121,7 @@ schema.pre(/^find/, function (next) {
  * @returns {Promise<boolean>} A promise that resolves to `true` if the passwords match, otherwise `false`.
  */
 schema.methods.isPasswordCorrect = async (password, hashedPassword) => {
-    return await bcrypt.compare(password, hashedPassword);
+	return await bcrypt.compare(password, hashedPassword);
 };
 
 /**
@@ -132,22 +132,21 @@ schema.methods.isPasswordCorrect = async (password, hashedPassword) => {
  * @returns {boolean} Returns `true` if the password was changed after the JWT was issued, otherwise `false`.
  */
 schema.methods.passwordChangedAfter = function (JWTTimestamp) {
-    if (this.password_changed_at) {
-        // check if the password is changed after issuing JWT.
-        const changeTimeStamp = parseInt(this.password_changed_at.getTime() / 1000, 10);
-        console.log(JWTTimestamp, changeTimeStamp);
-        return JWTTimestamp < changeTimeStamp;
-    }
-    return false;
+	if (this.password_changed_at) {
+		// check if the password is changed after issuing JWT.
+		const changeTimeStamp = parseInt(this.password_changed_at.getTime() / 1000, 10);
+		console.log(JWTTimestamp, changeTimeStamp);
+		return JWTTimestamp < changeTimeStamp;
+	}
+	return false;
 };
 
 schema.methods.createPasswordResetToken = function () {
-    const resetToken = crypto.randomBytes(32).toString('hex');
-    this.password_reset_token = crypto.createHash("sha256").update(resetToken).digest("hex");
-    this.password_reset_expires_in = Date.now() + 10 * 60 * 1000; // 10 min expire time.
-    return resetToken;
+	const resetToken = crypto.randomBytes(32).toString("hex");
+	this.password_reset_token = crypto.createHash("sha256").update(resetToken).digest("hex");
+	this.password_reset_expires_in = Date.now() + 10 * 60 * 1000; // 10 min expire time.
+	return resetToken;
 };
-
 
 const UserModel = mongoose.model("User", schema);
 export default UserModel;

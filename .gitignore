@@ -1,4 +1,12 @@
 .idea/
 .env
-node_modules/
+**/node_modules/
 .run/
+
+
+# Environment variables
+.env*
+
+# Code coverage
+coverage
+

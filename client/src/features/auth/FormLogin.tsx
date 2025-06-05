@@ -1,6 +1,9 @@
 import { Button, Label, TextInput } from '../../components';
+import { useLogin } from './useLogin';
 
 const FormLogin = () => {
+	const { isPending, error, login } = useLogin();
+
 	return (
 		<form className="mb-6 flex flex-col space-y-4 text-inherit">
 			<div className="flex shrink grow flex-col gap-1">
@@ -21,7 +24,14 @@ const FormLogin = () => {
 				/>
 			</div>
 
-			<Button>Login</Button>
+			<Button
+				onClick={(e) => {
+					e.preventDefault();
+					login({ email: 'dev.tahir@gmail.com', password: 'DEV.mt123456' });
+				}}
+			>
+				Login
+			</Button>
 		</form>
 	);
 };
