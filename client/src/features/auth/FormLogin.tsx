@@ -1,8 +1,7 @@
-import { Button, Label, TextInput } from '../../components';
-import { useLogin } from './useLogin';
+import { ReactNode } from 'react';
+import { Label, TextInput } from '../../components';
 
-const FormLogin = () => {
-	const { isPending, error, login } = useLogin();
+const FormLogin = ({ children }: { children: ReactNode }) => {
 
 	return (
 		<form className="mb-6 flex flex-col space-y-4 text-inherit">
@@ -23,15 +22,7 @@ const FormLogin = () => {
 					className="text-text-on-primary border-text-on-primary/15 border-[1px]"
 				/>
 			</div>
-
-			<Button
-				onClick={(e) => {
-					e.preventDefault();
-					login({ email: 'dev.tahir@gmail.com', password: 'DEV.mt123456' });
-				}}
-			>
-				Login
-			</Button>
+			{children}
 		</form>
 	);
 };

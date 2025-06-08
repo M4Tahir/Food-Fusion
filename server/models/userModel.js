@@ -5,9 +5,8 @@ import crypto from "crypto";
 
 const schemeOption = {
 	timestamps: { createdAt: "date_created", updatedAt: "date_updated" },
-	toJSON: { virtuals: true }, // so we can get virtual properties in there when convert to JSON
+	toJSON: { virtuals: true, versionKey: false }, // so we can get virtual properties in there when convert to JSON
 	toObject: { virtuals: true }, // to appear in log when used.
-	versionKey: "version",
 };
 
 const schema = new mongoose.Schema(
@@ -38,6 +37,7 @@ const schema = new mongoose.Schema(
 			required: [true, "Password is required"],
 			minlength: [8, "Password must be at least 8 characters long"],
 			select: false,
+			// private: true,
 			trim: true,
 			validate: {
 				validator: function (value) {

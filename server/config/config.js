@@ -11,6 +11,9 @@ const envVarsSchema = Joi.object({
 	HOST: Joi.string().required().description("Host is required").default("127.0.0.1"),
 	DB_LOCAL: Joi.string().required().description("MongoDB URL"),
 	DB_REMOTE: Joi.string().description("MongoDB Remote URL"),
+	DB_REMOTE_USERNAME: Joi.string().description("MongoDB server username").required(),
+	DB_REMOTE_PASSWORD: Joi.string().description("The password for MongoDB server (Remote)").required(),
+
 	JWT_SECRETE: Joi.string().required().description("JWT secret kye"),
 	JWT_EXPIRES_IN: Joi.string().required().description("JWT expiration time"),
 
@@ -24,10 +27,14 @@ const envVarsSchema = Joi.object({
 
 const { value, error } = envVarsSchema.validate(process.env, {
 	errors: { label: "key" },
+	abortEarly: false, //Instead of stopping at the first validation error, it collects all errors and reports them together.
+	allowUnknown: true, // Allows extra environment variables not listed in your schema.
+	stripUnknown: true, // Removes any keys that are not defined in your schema from the validated output.
 });
 
 if (error) {
-	throw new Error(`Config validation error: ${error.message}`);
+	console.error(`Config validation error: ${error.message}`);
+	process.exit(1);
 }
 
 export default {
@@ -37,6 +44,8 @@ export default {
 	mongoose: {
 		URLLocal: value.DB_LOCAL,
 		URLRemote: value.DB_REMOTE,
+		REMOTE_DB_PASSWORD: value.REMOTE_DB_PASSWORD,
+		REMOTE_DB_USERNAME: value.REMOTE_DB_USERNAME,
 	},
 	jwt: {
 		secrete: value.JWT_SECRETE,

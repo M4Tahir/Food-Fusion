@@ -13,7 +13,7 @@ process.on("uncaughtException", (error, origin) => {
 //////////////////////////////////////////////////////////////////////////////////////
 import mongoose from "mongoose";
 
-mongoose.connect(config.mongoose.URLLocal, { dbName: "food_fusion" }).then((conn) => {
+mongoose.connect(config.mongoose.URLRemote, { dbName: "food_fusion" }).then((conn) => {
 	console.log("Database connection is successful");
 	console.log(`Host: ${conn.connection.host}\nPort: ${conn.connection.port}\n`);
 });

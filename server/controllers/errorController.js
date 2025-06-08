@@ -37,7 +37,6 @@ const handleError = (err) => {
 };
 
 const sendErrorProduction = (err, res) => {
-	console.log(err);
 	if (!err.isOperational) {
 		console.error(err);
 		return res.status(500).json({
@@ -63,7 +62,8 @@ const sendErrorDevelopment = (err, res) => {
 const globalExpressErrorController = (err, req, res, next) => {
 	err.status ||= "fail";
 	err.statusCode ||= 500;
-	if (Number.isInteger(err.statusCode) || err.statusCode < 100 || err.statusCode > 599) err.statusCode = 500;
+
+	if (!(Number.isInteger(err.statusCode) || err.statusCode < 100 || err.statusCode > 599)) err.statusCode = 500;
 
 	if (process.env.NODE_ENV === "development") sendErrorDevelopment(err, res);
 

@@ -1,5 +1,9 @@
 import { ReactNode, useContext, createContext } from 'react';
 
+interface User{
+	
+}
+
 type AuthContextType = {
 	user: null | { name: string };
 	login: (user: { name: string }) => void;

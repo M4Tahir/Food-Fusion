@@ -1,6 +1,7 @@
-import { Button, Label, TextInput } from '../../components';
+import { ReactNode } from 'react';
+import { Label, TextInput } from '../../components';
 
-const FormSignup = () => {
+const FormSignup = ({ children }: { children: ReactNode }) => {
 	return (
 		<form className="mb-6 flex flex-col space-y-4">
 			<div className="flex shrink grow flex-col gap-1">
@@ -16,7 +17,7 @@ const FormSignup = () => {
 				<Label htmlFor="password-confirm">Confirm password</Label>
 				<TextInput id="password-confirm" placeholder="confirm you password" />
 			</div>
-			<Button>Signup</Button>
+			{children}
 		</form>
 	);
 };

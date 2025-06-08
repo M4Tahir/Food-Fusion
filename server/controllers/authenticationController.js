@@ -61,7 +61,8 @@ const login = handleAsyncError(async (req, res, next) => {
 
 	const user = await UserModel.findOne({ email: email }).select("+password");
 
-	if (!user || !(await user.isPasswordCorrect(password, user.password))) return next(new ExpressErrorHandler("incorrect email or password"));
+	if (!user || !(await user.isPasswordCorrect(password, user.password)))
+		 return next(new ExpressErrorHandler("incorrect email or password", 401));
 
 	createAndSendToken(user, res, 201, next, false);
 });
@@ -129,11 +130,12 @@ const updateMyPassword = handleAsyncError(async (req, res, next) => {
 	const user = await UserModel.findById(req.user.id).select("+password");
 	console.log(user.password);
 	if (!(await user.isPasswordCorrect(req.body.password_current, user.password)))
-		return next(new ExpressErrorHandler("current password is incorrect"));
+		return next(new ExpressErrorHandler("current password is incorrect", 403));
 
 	const password = req.body.password?.trim();
 	const passwordConfirm = req.body.password_confirm?.trim();
-	if (!(password && passwordConfirm)) return next(new ExpressErrorHandler("please provide password correct password"));
+
+	if (!(password && passwordConfirm)) return next(new ExpressErrorHandler("please provide password correct password",400));
 	user.password = password;
 	user.password_confirm = passwordConfirm;
 	await user.save();

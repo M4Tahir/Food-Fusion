@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { FormSignup, SocialLogin, socialLinkProvider } from '.';
-import { Logo } from '../../components';
+import { Button, Logo } from '../../components';
 
 const Signup = () => {
 	return (
@@ -10,7 +10,9 @@ const Signup = () => {
 					<Logo width="64" height="64" />
 					<h1 className="text-3xl">Signup to start baking</h1>
 				</header>
-				<FormSignup />
+				<FormSignup>
+					<Button>Signup</Button>
+				</FormSignup>
 				<div>
 					<SocialLogin providers={socialLinkProvider}>
 						<hr className="text-muted mt-6" />

@@ -11,7 +11,7 @@ const useLogin = () => {
         mutationKey: ["login"],
         onSuccess: (data, variables, context) => {
             console.log(data)
-            navigate("/")
+            navigate("/", { replace: true })
         },
         onError: () => {
 

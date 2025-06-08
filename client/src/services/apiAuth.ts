@@ -1,3 +1,5 @@
+import { config } from "../config";
+
 
 const getCurrentUser = async () => {
 
@@ -7,9 +9,7 @@ const getCurrentUser = async () => {
 
 const login = async ({ email, password }: { email: string, password: string }) => {
 
-    console.log(email, password)
-
-    const res = await fetch("http://127.0.0.1:8080/api/v1/users/login", {
+    const res = await fetch(`${config.backend.apiUrl}/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -30,5 +30,10 @@ const login = async ({ email, password }: { email: string, password: string }) =
 const logout = async () => {
 
 }
+
+const getMe = async () => {
+    
+}
+
 
 export { getCurrentUser, login, logout }
